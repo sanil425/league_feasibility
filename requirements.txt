@@ -1,0 +1,4 @@
+pulp
+openai
+python-dotenv
+pandas
