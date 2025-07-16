@@ -2,12 +2,20 @@
 
 import React, { useState } from 'react';
 
-const InputForm = ({ onSubmit }) => {
+const InputForm = ({ onResult }) => {
     const [promptHeader, setPromptHeader] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(promptHeader);
+
+        const response = await fetch("/simulate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: promptHeader })
+        });
+
+        const data = await response.json();
+        onResult(data);
     };
 
     return (
