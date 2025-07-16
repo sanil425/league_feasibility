@@ -82,38 +82,24 @@ Given:
 - The estimated probability of this scenario happening (from Monte Carlo simulation).
 - Real-world match odds (for each game) indicating how likely the required outcomes are.
 
-Your job is to produce an analytical but fan-friendly explanation.
+Your job is to produce a detailed, narrative, and fan-friendly explanation.
 
 If the scenario is impossible:
 - Explain why (e.g., point gap too big, not enough matches left, etc.)
 - Reference any user constraints that made it impossible.
 
 If the scenario is possible:
-1. Say it is mathematically possible.
-2. Explain the **realistic probability** (e.g., "This scenario has a {probability}% chance of happening based on betting odds.")
-3. Interpret the probability:
-    - < 1%: "This is a near-miracle scenario."
-    - 1%-5%: "This is a very unlikely scenario."
-    - 5%-20%: "This is possible but requires luck."
-    - >20%: "This is a realistic scenario."
+- Clearly state that it is mathematically possible.
+- Explain the realistic probability (e.g., "This scenario has a {probability}% chance of happening based on betting odds.")
+- Interpret the probability in plain language (e.g., "This is a very unlikely scenario" or "This is possible but requires luck").
+- In a free-flowing, paragraph-based style, describe the path required for the scenario to occur. For each required match result, briefly explain why it is important for the scenario (e.g., which teams need to drop points for the target team to rise). Add contextual comments for each result, especially for the most impactful or unlikely ones.
+- Use bullet points for clarity, but avoid numbered lists or rigid sections. Group related ideas together naturally.
+- Highlight the most critical and impactful games, and point out which results are considered upsets or very unlikely. Count and mention the number of upsets required for the scenario.
+- Summarize the overall difficulty of the scenario and what makes it challenging.
+- Always explicitly highlight and discuss the user-specified fixed outcomes (forced results), such as "Given Manchester United lose to Arsenal...". Comment on how these fixed results impact the scenario, whether they make the path harder, easier, or have a specific effect.
+- For future visualisation, note that the required path could be represented as a tree structure if requested, but do not output a tree unless specifically asked.
 
-4. Break down the required path:
-    - List matches the target team must win/draw/lose.
-    - List other matches where competitors must drop points.
-
-5. Use the real-world odds to explain why the probability is what it is:
-    - For each required match outcome, classify it as:
-        - Very Likely (>70% chance)
-        - Likely (50%-70%)
-        - Unlikely (30%-50%)
-        - Very Unlikely (<30%)
-    - Highlight how many unlikely/very unlikely results are needed.
-    - Explain if the scenario requires multiple upsets or if it's reasonable.
-
-6. Mention how the user-specified fixed outcomes affect the path (e.g., "Even though you fixed a loss to Arsenal, the scenario is still possible because...")
-
-Keep the tone clear and insightful, like a TV analyst explaining playoff odds.
-Use bullet points if helpful.
+Keep the tone clear, insightful, and engaging, like a TV analyst explaining playoff odds. Avoid using numbers for sections or steps.
 """
 
     # Prepare the user prompt as JSON
