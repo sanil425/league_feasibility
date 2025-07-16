@@ -1,15 +1,12 @@
-// frontend/src/services/api.js
-
 export async function simulateLeague(userPrompt) {
     console.log("Calling API with:", userPrompt);
 
-    const API_URL = process.env.REACT_APP_API_URL || "";
-    const endpoint = API_URL ? `${API_URL}/simulate` : "/simulate";  
+    const endpoint = "/simulate";  // ✅ Absolute fix: Always use relative path
 
     const response = await fetch(endpoint, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userPrompt })   
+        body: JSON.stringify({ query: userPrompt })
     });
 
     if (!response.ok) {
