@@ -1,6 +1,10 @@
-pulp
-openai
-python-dotenv
-pandas
+fastapi
+uvicorn[standard]
 numpy
-pickle5
+pandas
+scipy
+requests
+python-multipart
+python-dotenv
+openai
+httpx
