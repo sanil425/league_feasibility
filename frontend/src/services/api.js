@@ -1,13 +1,20 @@
 // frontend/src/services/api.js
 
-import axios from 'axios';
+export async function simulateLeague(userPrompt) {
+    console.log("Calling API with:", userPrompt);
 
-export const simulateLeague = async (userPrompt) => {
-    try {
-        const response = await axios.post('http://localhost:8000/simulate/', { user_prompt: userPrompt });
-        return response.data;
-    } catch (error) {
-        console.error('Error simulating league:', error);
-        throw error;
+    const API_URL = process.env.REACT_APP_API_URL || "";
+    const endpoint = API_URL ? `${API_URL}/simulate` : "/simulate";  
+
+    const response = await fetch(endpoint, { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: userPrompt })   
+    });
+
+    if (!response.ok) {
+        throw new Error("Error simulating league");
     }
-};
+
+    return await response.json();
+}
