@@ -1,0 +1,8 @@
+### manutd_top10_loss_arsenal
+Can Manchester United finish in the top 10 even if they lose to Arsenal?
+
+### liverpool_win_league
+Is it possible for Liverpool to win the league if they draw against Manchester City?
+
+### chelsea_top4_with_draws
+Can Chelsea still finish in the top 4 if they draw their next two matches? 

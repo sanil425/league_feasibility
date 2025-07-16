@@ -1,5 +1,9 @@
 import random
 from get_odds import get_odds
+import pickle
+import os
+import json
+import hashlib
 
 # set number of simulations
 NUM_SIMULATIONS = 10000
@@ -182,3 +186,33 @@ def apply_simulation(base_table, simulated_results, fixed_outcomes):
         sim_table[team]["position"] = pos
 
     return sim_table
+
+
+def save_sim(data, filename):
+    ensure_folder_exists(filename)
+    with open(filename, 'wb') as f:
+        pickle.dump(data, f)
+
+def load_sim(filename):
+    if os.path.exists(filename):
+        with open(filename, 'rb') as f:
+            return pickle.load(f)
+    else:
+        return None
+
+def get_cache_filename(target_team, target_rank, fixed_outcomes_mc):
+    key_string = json.dumps({
+        "team": target_team,
+        "rank": target_rank,
+        "fixed_outcomes": fixed_outcomes_mc
+    }, sort_keys=True)
+
+    key_hash = hashlib.md5(key_string.encode()).hexdigest()
+
+    return f"cache/monte_carlo_{key_hash}.pkl"
+
+
+def ensure_folder_exists(filepath):
+    folder = os.path.dirname(filepath)
+    if folder and not os.path.exists(folder):
+        os.makedirs(folder)

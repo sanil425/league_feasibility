@@ -2,7 +2,7 @@ import pandas as pd
 from pulp import LpProblem, LpMaximize, LpVariable, LpBinary, LpMinimize, LpConstraint, LpStatus, lpSum
 from gpt_interface import call_gpt, explain_solution
 from data_loader import load_data
-from monte_carlo import run_monte_carlo
+from monte_carlo import run_monte_carlo, get_cache_filename, save_sim, load_sim
 
 
 
@@ -82,10 +82,17 @@ user_input = input("\nEnter your scenario: ")
 # call gpt
 scenario = call_gpt(user_input)
 
-# extract scenario components
-target_team_raw = scenario["target_team"]
-target_rank = scenario["target_rank"]
-fixed_outcomes = scenario["fixed_outcomes"]
+# extract scenario components safely, handling None scenario
+if scenario is None:
+    raise ValueError("Scenario could not be parsed from GPT. Please try again or check your input.")
+
+try:
+    target_team_raw = scenario["target_team"]
+    target_rank = scenario["target_rank"]
+    fixed_outcomes = scenario["fixed_outcomes"]
+except (KeyError, TypeError):
+    raise ValueError("Scenario is missing required fields: 'target_team', 'target_rank', or 'fixed_outcomes'.")
+
 target_team = match_team_name(target_team_raw, standings_df["team_name"].tolist())
 
 
@@ -223,7 +230,19 @@ if LpStatus[model.status] == "Optimal":
 
     # Run Monte Carlo to estimate probability and get odds data
     print("\nRunning Monte Carlo simulation to estimate likelihood...\n")
-    probability, odds_data = run_monte_carlo(target_team, target_rank, fixed_outcomes_mc, standings_df, fixtures_df)
+
+    cache_filename = get_cache_filename(target_team, target_rank, fixed_outcomes_mc)
+
+    cached_result = load_sim(cache_filename)
+
+    if cached_result is not None:
+        print(f"Using cached result from {cache_filename}")
+        probability, odds_data = cached_result
+    else:
+        print(f"No cached result found for {cache_filename}, running Monte Carlo simulation...")
+        probability, odds_data = run_monte_carlo(target_team, target_rank, fixed_outcomes_mc, standings_df, fixtures_df)
+
+        save_sim((probability, odds_data), cache_filename)
 
     # Call GPT for explanation, passing in odds and probability
     explanation = explain_solution(

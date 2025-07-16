@@ -2,3 +2,5 @@ pulp
 openai
 python-dotenv
 pandas
+numpy
+pickle5
