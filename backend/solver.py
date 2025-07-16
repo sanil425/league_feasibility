@@ -2,11 +2,14 @@ import pandas as pd
 from pulp import LpProblem, LpMaximize, LpVariable, LpBinary, LpMinimize, LpConstraint, LpStatus, lpSum
 from gpt_interface import call_gpt, explain_solution
 from data_loader import load_data
+from monte_carlo import run_monte_carlo
 
 
 
+# helpers
 
-# helper
+
+
 
 def match_team_name(input_name, team_list):
     for team in team_list:
@@ -192,24 +195,66 @@ for idx, row in fixtures_df.iterrows():
 
     solution_outcomes.append(outcome)
 
-# call GPT for explanation (feasible or infeasible)
+
+# Check feasibility using LP model
 if LpStatus[model.status] == "Optimal":
     print(f"✅ It is still mathematically possible for {target_team} to finish in the top {target_rank}.\n")
 
-    explanation = explain_solution(target_team, target_rank, solution_outcomes, fixed_outcomes, feasible=True)
+    # Convert fixed_outcomes to Monte Carlo format (if needed)
+    fixed_outcomes_mc = {}
+    for outcome in fixed_outcomes:
+        match = outcome["match"]
+        result = outcome["result"]
+
+        home, away = match.split(" vs ")
+
+        if result == "win":
+            if target_team == home:
+                fixed_outcomes_mc[match] = "home"
+            else:
+                fixed_outcomes_mc[match] = "away"
+        elif result == "loss":
+            if target_team == home:
+                fixed_outcomes_mc[match] = "away"
+            else:
+                fixed_outcomes_mc[match] = "home"
+        elif result == "draw":
+            fixed_outcomes_mc[match] = "draw"
+
+    # Run Monte Carlo to estimate probability and get odds data
+    print("\nRunning Monte Carlo simulation to estimate likelihood...\n")
+    probability, odds_data = run_monte_carlo(target_team, target_rank, fixed_outcomes_mc, standings_df, fixtures_df)
+
+    # Call GPT for explanation, passing in odds and probability
+    explanation = explain_solution(
+        target_team=target_team,
+        target_rank=target_rank,
+        solution_outcomes=solution_outcomes,
+        fixed_outcomes=fixed_outcomes,
+        feasible=True,
+        probability=probability,
+        odds_data=odds_data
+    )
+
     print("\nGPT Explanation of Required Path:\n")
     print(explanation)
 
 else:
     print(f"❌ It is NOT possible for {target_team} to finish in the top {target_rank}.\n")
 
-    explanation = explain_solution(target_team, target_rank, solution_outcomes, fixed_outcomes, feasible=False)
+    # If infeasible, no need for Monte Carlo or odds
+    explanation = explain_solution(
+        target_team=target_team,
+        target_rank=target_rank,
+        solution_outcomes=solution_outcomes,
+        fixed_outcomes=fixed_outcomes,
+        feasible=False,
+        probability=0.0,
+        odds_data=None
+    )
+
     print("\nGPT Explanation of Why This is Impossible:\n")
     print(explanation)
-
-
-
-
 
 
 
