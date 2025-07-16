@@ -1,24 +1,30 @@
-# Python cache
+# Python (Backend)
+venv/
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.cache/
+data/  # if this is generated or contains temp data (optional)
 
-# Virtual environment
-venv/
+# Node.js (Frontend)
+frontend/node_modules/
+frontend/.cache/
+frontend/dist/
+frontend/build/  # Optional: Keep if you want to rebuild on deploy, ignore if not
 
-# API keys / environment variables
-.env
-
-# IDE configs
+# OS / IDE Files
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
 
-# OS-specific files
-.DS_Store
-Thumbs.db
+# Environment Files
+.env
 
-# Logs and outputs
+# Logs
 *.log
 
-# Temporary or personal data (optional)
-data/prem_*.json
+# Optional: Ignore frontend build locally but include in deployment if needed
+# If you serve frontend via backend, you may choose to keep `frontend/build/` committed
+# If you deploy frontend separately, it's better to ignore `frontend/build/`

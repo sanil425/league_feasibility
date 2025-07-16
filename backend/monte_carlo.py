@@ -1,5 +1,5 @@
 import random
-from get_odds import get_odds
+from backend.get_odds import get_odds
 import pickle
 import os
 import json
