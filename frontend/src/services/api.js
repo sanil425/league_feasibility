@@ -1,7 +1,9 @@
+// frontend/src/services/api.js
+
 export async function simulateLeague(userPrompt) {
     console.log("Calling API with:", userPrompt);
 
-    const endpoint = "/simulate";  // ✅ Absolute fix: Always use relative path
+    const endpoint = "/simulate";  
 
     const response = await fetch(endpoint, { 
         method: "POST",
@@ -15,3 +17,4 @@ export async function simulateLeague(userPrompt) {
 
     return await response.json();
 }
+n
