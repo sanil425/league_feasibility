@@ -1,9 +1,8 @@
-// frontend/src/services/api.js
 
 export async function simulateLeague(userPrompt) {
     console.log("Calling API with:", userPrompt);
 
-    const endpoint = "/simulate";  
+    const endpoint = "/simulate/";  
 
     const response = await fetch(endpoint, { 
         method: "POST",

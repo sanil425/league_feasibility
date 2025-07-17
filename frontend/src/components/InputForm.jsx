@@ -8,7 +8,7 @@ const InputForm = ({ onResult }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("/simulate", {
+        const response = await fetch("/simulate/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ query: promptHeader })

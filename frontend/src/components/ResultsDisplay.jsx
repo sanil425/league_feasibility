@@ -14,7 +14,7 @@ const ResultsDisplay = ({ result }) => {
 
             <h3>Match Outcomes:</h3>
             <ul>
-                {result.match_outcomes.map((outcome, idx) => (
+                {Array.isArray(result.match_outcomes) && result.match_outcomes.map((outcome, idx) => (
                     <li key={idx}>{outcome.match}: {outcome.result}</li>
                 ))}
             </ul>
