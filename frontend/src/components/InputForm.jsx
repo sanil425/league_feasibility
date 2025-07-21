@@ -1,36 +1,34 @@
 // frontend/src/components/InputForm.jsx
 
 import React, { useState } from 'react';
+import { simulateLeague } from '../services/api';
 
-const InputForm = ({ onResult }) => {
-    const [promptHeader, setPromptHeader] = useState('');
+function InputForm({ onResult }) {
+    const [input, setInput] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const response = await fetch("/simulate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: promptHeader })
-        });
-
-        const data = await response.json();
-        onResult(data);
+        try {
+            const result = await simulateLeague(input);
+            onResult(result);
+        } catch (error) {
+            console.error(error);
+            alert("Simulation failed. Check the backend or try again.");
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-            <label>Enter Query:</label>
-            <input
-                type="text"
-                value={promptHeader}
-                onChange={(e) => setPromptHeader(e.target.value)}
-                placeholder="e.g. Can Manchester City make it into the top 4 even if they lose to Arsenal?"
-                style={{ margin: '10px', padding: '8px' }}
+            <input 
+                type="text" 
+                value={input} 
+                onChange={(e) => setInput(e.target.value)} 
+                placeholder="Enter scenario e.g. Can Liverpool make top 4?"
+                style={{ width: "300px", marginRight: "10px" }}
             />
             <button type="submit">Simulate</button>
         </form>
     );
-};
+}
 
 export default InputForm;

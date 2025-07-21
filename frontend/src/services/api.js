@@ -1,8 +1,11 @@
+// frontend/src/services/api.js
 
 export async function simulateLeague(userPrompt) {
     console.log("Calling API with:", userPrompt);
 
-    const endpoint = "/simulate";  
+    // Use environment variable or fallback to local dev
+    const baseURL = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000";
+    const endpoint = `${baseURL}/simulate/`;
 
     const response = await fetch(endpoint, { 
         method: "POST",
@@ -16,4 +19,3 @@ export async function simulateLeague(userPrompt) {
 
     return await response.json();
 }
-n
