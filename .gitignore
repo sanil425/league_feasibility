@@ -9,9 +9,10 @@ data/  # if this is generated or contains temp data (optional)
 
 # Node.js (Frontend)
 frontend/node_modules/
+frontend/.next/
 frontend/.cache/
 frontend/dist/
-frontend/build/  # Optional: Keep if you want to rebuild on deploy, ignore if not
+frontend/build/
 
 # OS / IDE Files
 .DS_Store
@@ -21,6 +22,7 @@ Thumbs.db
 
 # Environment Files
 .env
+frontend/.env*
 
 # Logs
 *.log
