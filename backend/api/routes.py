@@ -5,10 +5,14 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Enable CORS for all origins (for development)
+# Enable CORS for Vercel deployments and local development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # You can restrict this to ["http://localhost:3000"] for more security
+    allow_origins=[
+        "http://localhost:3000",  # local dev
+        "https://league-feasibility.vercel.app",  # production Vercel domain
+    ],
+    allow_origin_regex=r"^https://.*\.vercel\.app$",  # preview deploys
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
